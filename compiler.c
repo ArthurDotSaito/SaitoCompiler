@@ -8,5 +8,11 @@ int compile_file(const char *filename, const char *out_filename, int flags)
             return COMPILER_FAILED_WITH_ERRORS;
     };
 
+    // Perform lexical analysis
+
+    // Perform parsing
+
+    // Perform code gen
+
     return COMPILER_FILE_COMPILED_OK;
 }
