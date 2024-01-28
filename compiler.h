@@ -2,6 +2,31 @@
 #define SAITOCOMPILER_H
 
 #include <stdio.h>
+#include <stdbool.h>
+
+struct token
+{
+    int type;
+    int flags;
+
+    union
+    {
+        char cval;
+        const char *sval;
+        unsigned int inum;
+        unsigned long lnum;
+        unsigned long long llnum;
+        void *any;
+    };
+
+    // It's true if there is whitespace between the token and the next token.
+    // i.e * a for operator token * would mean whitespace would be set for token "a"
+    bool whitespace;
+
+    // (Hello World) Every token inside the brackets would have between_brackets pointing to the start of this expression
+    // Extremely useful for debbuging
+    const char *between_brackets;
+};
 
 enum
 {
