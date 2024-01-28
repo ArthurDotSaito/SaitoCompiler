@@ -43,3 +43,17 @@ char compile_process_next_char(struct lex_process *lex_process)
 
     return c;
 }
+
+char compile_process_peek_char(struct lex_process *lex_process)
+{
+    struct compile_process *compiler = lex_process->compiler;
+    char c = getc(compiler->cfile.fp);
+    ungetc(c, compiler->cfile.fp);
+    return c;
+}
+
+void compile_process_push_char(struct lex_process *lex_process, char c)
+{
+    struct compile_process *compiler = lex_process->compiler;
+    ungetc(c, compiler->cfile.fp);
+}
