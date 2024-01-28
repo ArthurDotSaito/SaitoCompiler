@@ -23,6 +23,20 @@ enum
     TOKEN_TYPE_NEWLINE,
 };
 
+struct lex_process
+{
+    struct pos pos;
+    struct vector *token_vec;
+    struct compiler_process *compiler;
+
+    int current_expression_count;
+    struct buffer *parentheses_buffer;
+    struct lex_process_functions *function;
+
+    // This will be private data that the the lexer does not understand, but the person using the lexer does.
+    void *private;
+};
+
 struct token
 {
     int type;
