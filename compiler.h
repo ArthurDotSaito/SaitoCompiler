@@ -85,6 +85,7 @@ struct compile_process
     // flags in regards to how this file should be compiled (.exe, .obj, etc)
     int flags;
 
+    struct pos pos;
     struct compile_process_input_file
     {
         FILE *fp;

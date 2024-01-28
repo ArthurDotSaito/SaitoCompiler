@@ -27,3 +27,19 @@ struct compile_process *compile_process_create(const char *filename, const char 
 
     return process;
 };
+
+char compile_process_next_char(struct lex_process *lex_process)
+{
+    struct compile_process *compiler = lex_process->compiler;
+    compiler->pos.col += 1;
+
+    char c = getc(compiler->cfile.fp);
+
+    if (c = '/n')
+    {
+        compiler->pos.line += 1;
+        compiler->pos.col = 0;
+    }
+
+    return c;
+}
