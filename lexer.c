@@ -1,6 +1,12 @@
 #include "compiler.h"
 static struct lex_process *lex_process;
 
+// Acess cprocess/compiler_process_peek_char
+static char peekc()
+{
+    return lex_process->function->peek_char(lex_process);
+}
+
 struct token *read_next_token()
 {
     struct token *token = NULL;
