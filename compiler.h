@@ -86,7 +86,7 @@ enum
     COMPILER_FAILED_WITH_ERRORS
 };
 
-struct compile_process
+struct compiler_process
 {
     // flags in regards to how this file should be compiled (.exe, .obj, etc)
     int flags;
