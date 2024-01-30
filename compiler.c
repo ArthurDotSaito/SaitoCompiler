@@ -20,6 +20,16 @@ void compiler_error(struct compiler_process *compiler, const char *msg, ...)
     exit(-1);
 }
 
+void compiler_warning(struct compiler_process *compiler, const char *msg, ...)
+{
+    va_list args;
+    va_start(args, msg);
+    vfprintf(stderr, msg, args);
+    va_end(args);
+
+    fprintf(stderr, "on line %i, col %i in file %s\n", compiler->pos.line, compiler->pos.col, compiler->pos.filename);
+}
+
 int compile_file(const char *filename, const char *out_filename, int flags)
 {
     struct compiler_process *process = compile_process_create(filename, out_filename, flags);

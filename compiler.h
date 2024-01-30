@@ -17,6 +17,18 @@ enum
     LEXICAL_ANALYSIS_INPUT_ERROR
 };
 
+#define NUMERIC_CASE \
+    case '0':        \
+    case '1':        \
+    case '2':        \
+    case '3':        \
+    case '4':        \
+    case '5':        \
+    case '6':        \
+    case '7':        \
+    case '8':        \
+    case '9'
+
 enum
 {
     TOKEN_TYPE_IDENTIFIER,
@@ -112,6 +124,9 @@ struct lex_process *lex_process_create(struct compile_process *compiler, struct 
 void lex_process_free(struct lex_process *process);
 void *lex_process_private(struct lex_process *process);
 struct vector lex_process_tokens(struct lex_process *process);
+
+void compiler_error(struct compiler_process *compiler, const char *msg, ...);
+void compiler_warning(struct compiler_process *compiler, const char *msg, ...);
 
 int lex(struct lex_process *process);
 
