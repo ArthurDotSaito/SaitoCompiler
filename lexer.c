@@ -5,6 +5,7 @@
 
 static struct lex_process *lex_process;
 static struct token tmp_token;
+struct token *read_next_token();
 
 #define LEX_GETC_IF(buffer, c, exp)     \
     for (c = peekc(); exp; c = peekc()) \
@@ -109,7 +110,7 @@ struct token *read_next_token()
 
     case ' ':
     case '\t':
-        handle_whitespace();
+        token = handle_whitespace();
         break;
 
     case EOF:
