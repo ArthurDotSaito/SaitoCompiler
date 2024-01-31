@@ -25,11 +25,6 @@ static char pushc(char c)
     lex_process->function->push_char(lex_process, c);
 }
 
-static struct pos lex_file_position()
-{
-    return lex_process->pos;
-}
-
 static char nextc()
 {
     char c = lex_process->function->next_char(lex_process);

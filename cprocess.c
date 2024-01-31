@@ -13,7 +13,7 @@ struct compiler_process *compile_process_create(const char *filename, const char
 
     if (filename_out)
     {
-        FILE *out_file = fopen(filename, "w");
+        FILE *out_file = fopen(filename_out, "w");
         if (!out_file)
         {
             return NULL;
@@ -35,7 +35,7 @@ char compile_process_next_char(struct lex_process *lex_process)
 
     char c = getc(compiler->cfile.fp);
 
-    if (c == '/n')
+    if (c == '\n')
     {
         compiler->pos.line += 1;
         compiler->pos.col = 1;
