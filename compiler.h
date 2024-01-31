@@ -72,6 +72,7 @@ struct token
 {
     int type;
     int flags;
+    struct pos pos;
 
     union
     {

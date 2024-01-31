@@ -1,8 +1,10 @@
 #include "compiler.h"
 #include "helpers/buffer.h"
 #include "helpers/vector.h"
+#include <string.h>
 
 static struct lex_process *lex_process;
+static struct token tmp_token;
 
 #define LEX_GETC_IF(buffer, c, exp)     \
     for (c = peekc(); exp; c = peekc()) \
@@ -23,6 +25,11 @@ static char pushc(char c)
     lex_process->function->push_char(lex_process, c);
 }
 
+static struct pos lex_file_position()
+{
+    return lex_process->pos;
+}
+
 static char nextc()
 {
     char c = lex_process->function->next_char(lex_process);
@@ -36,6 +43,18 @@ static char nextc()
     return c;
 }
 
+static struct pos lex_file_position()
+{
+    return lex_process->pos;
+}
+
+struct token *token_create(struct token *_token)
+{
+    memcpy(&tmp_token, _token, sizeof(struct token));
+    tmp_token.pos = lex_file_position();
+    return &tmp_token;
+}
+
 const char *read_number_str()
 {
     const char *num = NULL;
@@ -47,7 +66,18 @@ const char *read_number_str()
     return buffer_ptr(buffer);
 }
 
-struct token *token_make_number_for_value(unsigned long number){};
+unsigned long long read_number()
+{
+    const char *s = read_number_str();
+    return atoll(s);
+}
+
+struct token *token_make_number_for_value(unsigned long number)
+{
+    return token_create(&(struct token){
+        .type = TOKEN_TYPE_NUMBER,
+        .llnum = number});
+};
 
 struct token *token_make_number()
 {
