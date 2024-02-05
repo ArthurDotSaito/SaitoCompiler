@@ -13,7 +13,7 @@ struct compiler_process *compile_process_create(const char *filename, const char
 
     if (filename_out)
     {
-        FILE *out_file = fopen(filename_out, "w");
+        out_file = fopen(filename_out, "w");
         if (!out_file)
         {
             return NULL;
