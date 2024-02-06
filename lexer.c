@@ -2,6 +2,7 @@
 #include "helpers/buffer.h"
 #include "helpers/vector.h"
 #include <string.h>
+#include <assert.h>
 
 static struct lex_process *lex_process;
 static struct token tmp_token;
@@ -98,6 +99,27 @@ struct token *token_make_number()
     return token_make_number_for_value(read_number());
 }
 
+static struct token *token_make_string(char start_delim, char end_delim)
+{
+    struct buffer *buffer = buffer_create();
+    assert(nextc() == start_delim);
+    char c = nextc();
+    for (; c != end_delim && c != EOF; c = nextc())
+    {
+        if (c == '\\')
+        {
+            // Handle escape character. E.g - "Hello world\n"
+            continue;
+        }
+        buffer_write(buffer, c);
+    }
+
+    buffer_write(buffer, 0x00);
+    return token_create(&(struct token){
+        .type = TOKEN_TYPE_STRING,
+        .sval = buffer_ptr(buffer)});
+}
+
 struct token *read_next_token()
 {
     struct token *token = NULL;
@@ -108,6 +130,9 @@ struct token *read_next_token()
         token = token_make_number();
         break;
 
+    case '"':
+        token = token_make_string('"', '"');
+        break;
     case ' ':
     case '\t':
         token = handle_whitespace();
