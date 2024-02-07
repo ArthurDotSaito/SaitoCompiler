@@ -29,6 +29,27 @@ enum
     case '8':        \
     case '9'
 
+#define OPERATOR_CASE_EXCLUDING_DIVISON \
+    case '+':                           \
+    case '-':                           \
+    case '*':                           \
+    case '>':                           \
+    case '<':                           \
+    case '^':                           \
+    case '%':                           \
+    case '!':                           \
+    case '=':                           \
+    case '~':                           \
+    case '|':                           \
+    case '&':                           \
+    case '(':                           \
+    case '[':                           \
+    case ',':                           \
+    case '.':                           \
+    case '?':                           \
+        \  
+    
+
 enum
 {
     TOKEN_TYPE_IDENTIFIER,
