@@ -120,6 +120,16 @@ static struct token *token_make_string(char start_delim, char end_delim)
         .sval = buffer_ptr(buffer)});
 }
 
+const char *read_op()
+{
+    // read an operator from input stream
+}
+
+static struct token *token_make_operator_or_string()
+{
+    return NULL;
+}
+
 struct token *read_next_token()
 {
     struct token *token = NULL;
@@ -128,6 +138,10 @@ struct token *read_next_token()
     {
     NUMERIC_CASE:
         token = token_make_number();
+        break;
+
+    OPERATOR_CASE_EXCLUDING_DIVISON:
+        token = token_make_operator_or_string();
         break;
 
     case '"':
