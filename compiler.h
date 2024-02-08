@@ -46,9 +46,7 @@ enum
     case '[':                           \
     case ',':                           \
     case '.':                           \
-    case '?':                           \
-        \  
-    
+    case '?':
 
 enum
 {

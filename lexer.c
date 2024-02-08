@@ -120,9 +120,57 @@ static struct token *token_make_string(char start_delim, char end_delim)
         .sval = buffer_ptr(buffer)});
 }
 
+static bool op_treated_as_one(char op)
+{
+    return op == '(' || op == '[' || op == ',' || op == '.' || op == '*' || op == '?';
+}
+
+static bool is_single_operator(char op)
+{
+    return op == '+' ||
+           op == '-' ||
+           op == '/' ||
+           op == '*' ||
+           op == '=' ||
+           op == '<' ||
+           op == '>' ||
+           op == '|' ||
+           op == '&' ||
+           op == '^' ||
+           op == '%' ||
+           op == '~' ||
+           op == '!' ||
+           op == '(' ||
+           op == '[' ||
+           op == ',' ||
+           op == '.' ||
+           op == '?';
+}
+
 const char *read_op()
 {
-    // read an operator from input stream
+    bool single_operator = true;
+    char op = nextc();
+
+    struct buffer *buffer = buffer_create();
+    buffer_write(buffer, op);
+
+    if (!op_treated_as_one(op))
+    {
+        op = peekc();
+        if (is_single_operator(op))
+        {
+            buffer_write(buffer, op);
+            nextc();
+            single_operator = false;
+        }
+    }
+    // NULL TERMINATOR
+    buffer_write(buffer, 0x00);
+    char *ptr = buffer_ptr(buffer);
+    if (!single_operator)
+    {
+        }
 }
 
 static struct token *token_make_operator_or_string()
