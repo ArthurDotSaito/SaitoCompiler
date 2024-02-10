@@ -185,6 +185,20 @@ bool op_valid(const char *op)
            S_EQ(op, "%");
 }
 
+void read_op_flush_back_keep_first(struct buffer *buffer)
+{
+    const char *data = buffer_ptr(buffer);
+    int len = buffer->len;
+    for (int i = len - 1; i >= 1; i--)
+    {
+        if (data[i] == 0x00)
+        {
+            continue;
+        }
+        pushc(data[i]);
+    }
+}
+
 const char *read_op()
 {
     bool single_operator = true;
@@ -208,11 +222,30 @@ const char *read_op()
     char *ptr = buffer_ptr(buffer);
     if (!single_operator)
     {
+        if (!op_valid(ptr))
+        {
+            read_op_flush_back_keep_first(buffer);
+            ptr[1] = 0x00;
+        }
     }
+    else if (!op_valid(ptr))
+    {
+        compiler_error(lex_process->compiler, "The operator %s is not valid\n", ptr);
+    }
+    return ptr;
 }
 
 static struct token *token_make_operator_or_string()
 {
+    char op = peekc();
+    if (op == '<')
+    {
+        struct token *last_token = lexer_last_token();
+        if (token_is_keyword(last_token, "include"))
+        {
+            return token_make_string('<', '>');
+        }
+    }
     return NULL;
 }
 
