@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define S_EQ(str, str2) \
+    (str && str2 && (strcmp(str, str2) == 0))
+
 struct pos
 {
     int line;

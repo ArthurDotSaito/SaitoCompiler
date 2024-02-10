@@ -147,6 +147,35 @@ static bool is_single_operator(char op)
            op == '?';
 }
 
+bool op_valid(const char *op)
+{
+    return S_EQ(op, "+") ||
+           S_EQ(op, "-") ||
+           S_EQ(op, "*") ||
+           S_EQ(op, "/") ||
+           S_EQ(op, "!") ||
+           S_EQ(op, "^") ||
+           S_EQ(op, "+=") ||
+           S_EQ(op, "-=") ||
+           S_EQ(op, "*=") ||
+           S_EQ(op, "/=") ||
+           S_EQ(op, ">>") ||
+           S_EQ(op, "<<") ||
+           S_EQ(op, ">=") ||
+           S_EQ(op, "<=") ||
+           S_EQ(op, ">") ||
+           S_EQ(op, "<") ||
+           S_EQ(op, "||") ||
+           S_EQ(op, "&&") ||
+           S_EQ(op, "|") ||
+           S_EQ(op, "&") ||
+           S_EQ(op, "++") ||
+           S_EQ(op, "--") ||
+           S_EQ(op, "=") ||
+           S_EQ(op, "!=") ||
+           S_EQ(op, "==") ||
+}
+
 const char *read_op()
 {
     bool single_operator = true;
@@ -170,7 +199,7 @@ const char *read_op()
     char *ptr = buffer_ptr(buffer);
     if (!single_operator)
     {
-        }
+    }
 }
 
 static struct token *token_make_operator_or_string()
