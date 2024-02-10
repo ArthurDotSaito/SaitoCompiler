@@ -174,6 +174,15 @@ bool op_valid(const char *op)
            S_EQ(op, "=") ||
            S_EQ(op, "!=") ||
            S_EQ(op, "==") ||
+           S_EQ(op, "->") ||
+           S_EQ(op, "(") ||
+           S_EQ(op, "[") ||
+           S_EQ(op, ",") ||
+           S_EQ(op, ".") ||
+           S_EQ(op, "...") ||
+           S_EQ(op, "~") ||
+           S_EQ(op, "?") ||
+           S_EQ(op, "%");
 }
 
 const char *read_op()
