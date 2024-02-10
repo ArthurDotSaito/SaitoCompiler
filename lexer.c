@@ -235,6 +235,20 @@ const char *read_op()
     return ptr;
 }
 
+static void lex_new_expression()
+{
+    lex_process->current_expression_count++;
+    if (lex_process->current_expression_count == 1)
+    {
+        lex_process->parentheses_buffer = buffer_create();
+    }
+}
+
+bool lex_is_in_expression()
+{
+    return lex_process->current_expression_count > 0;
+}
+
 static struct token *token_make_operator_or_string()
 {
     char op = peekc();
@@ -250,7 +264,8 @@ static struct token *token_make_operator_or_string()
     struct token *token = token_create(&(struct token){.type = TOKEN_TYPE_OPERATOR, .sval = read_op()});
     if (op == '(')
     {
-        }
+        lex_new_expression();
+    }
     return token;
 }
 
