@@ -246,7 +246,12 @@ static struct token *token_make_operator_or_string()
             return token_make_string('<', '>');
         }
     }
-    return NULL;
+
+    struct token *token = token_create(&(struct token){.type = TOKEN_TYPE_OPERATOR, .sval = read_op()});
+    if (op == '(')
+    {
+        }
+    return token;
 }
 
 struct token *read_next_token()

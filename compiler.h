@@ -153,4 +153,6 @@ void compiler_warning(struct compiler_process *compiler, const char *msg, ...);
 
 int lex(struct lex_process *process);
 
+bool token_is_keyword(struct token *token, const char *value);
+
 #endif
