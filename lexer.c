@@ -97,6 +97,7 @@ struct token *token_make_number_for_value(unsigned long number)
 
 struct token *token_make_number()
 {
+    nextc();
     return token_make_number_for_value(read_number());
 }
 
@@ -354,6 +355,11 @@ struct token *read_special_token()
     return NULL;
 }
 
+struct token *token_make_newline()
+{
+    return token_create(&(struct token){.type = TOKEN_TYPE_NEWLINE});
+}
+
 struct token *read_next_token()
 {
     struct token *token = NULL;
@@ -378,6 +384,12 @@ struct token *read_next_token()
     case '\t':
         token = handle_whitespace();
         break;
+
+    case '\n':
+        token = token_make_newline();
+        nextc();
+        break;
+        ;
 
     case EOF:
         // Here, we have finished lexical analysis on the file
