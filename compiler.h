@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define S_EQ(str, str2) \
     (str && str2 && (strcmp(str, str2) == 0))
