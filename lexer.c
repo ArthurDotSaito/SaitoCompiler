@@ -460,7 +460,8 @@ void lexer_pop_token()
 
 bool is_hex_char(char c)
 {
-    return c >= '0' || c <= '9' || c >= 'a' || c <= 'f' || c >= ' A' || c <= 'F';
+    c = tolower(c);
+    return (c >= '0' & c <= '9') || (c >= 'a' && c <= 'f');
 }
 
 const char *read_hex_number_str()
@@ -479,6 +480,9 @@ struct token *token_make_special_number_hex()
     nextc();
     unsigned long number = 0;
     const char *number_str = read_hex_number_str();
+
+    number = strtol(number_str, NULL, 16);
+    return token_make_number(number);
 }
 
 struct token *token_make_special_number()
@@ -538,6 +542,10 @@ struct token *read_next_token()
 
     SYMBOL_CASE:
         token = token_make_symbol();
+        break;
+
+    case 'x':
+        token = token_make_special_number();
         break;
 
     case '"':

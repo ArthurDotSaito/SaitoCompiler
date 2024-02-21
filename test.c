@@ -1,1 +1,2 @@
-// test comments. it should be alrigth
+// test hexadecimal number
+0xAB75;
