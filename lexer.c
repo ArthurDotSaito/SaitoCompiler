@@ -640,3 +640,44 @@ int lex(struct lex_process *process)
     }
     return LEXICAL_ANALYSIS_ALL_OK;
 }
+
+char lex_string_buffer_next_char(struct lex_process *process)
+{
+    struct buffer *buff = lex_process_private(process);
+    return buffer_read(buff);
+}
+
+char lex_string_buffer_peek_char(struct lex_process *process)
+{
+    struct buffer *buff = lex_process_private(process);
+    return buffer_peek(buff);
+}
+
+void lex_string_buffer_push_char(struct lex_process *process, char c)
+{
+    struct buffer *buff = lex_process_private(process);
+    return buffer_write(buff, c);
+}
+
+struct lex_process_functions lexer_string_buffer_functions = {
+    .next_char = lex_string_buffer_next_char,
+    .peek_char = lex_string_buffer_peek_char,
+    .push_char = lex_string_buffer_push_char,
+};
+
+struct lex_process *tokens_build_for_string(struct compiler_process *compiler, const char *str)
+{
+    struct buffer *buffer = buffer_create();
+    buffer_printf(buffer, str);
+    struct lex_process *lex_process = lex_process_create(compiler, &lexer_string_buffer_functions, buffer);
+    if (!lex_process)
+    {
+        return NULL;
+    }
+
+    if (lex(lex_process) != LEXICAL_ANALYSIS_ALL_OK)
+    {
+        return NULL;
+    }
+    return lex_process;
+}
