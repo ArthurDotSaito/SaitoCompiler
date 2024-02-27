@@ -8,6 +8,7 @@
 static struct lex_process *lex_process;
 static struct token tmp_token;
 struct token *read_next_token();
+bool lex_is_in_expression();
 
 #define LEX_GETC_IF(buffer, c, exp)     \
     for (c = peekc(); exp; c = peekc()) \
@@ -30,7 +31,14 @@ static char pushc(char c)
 
 static char nextc()
 {
+
     char c = lex_process->function->next_char(lex_process);
+
+    if (lex_is_in_expression())
+    {
+        buffer_write(lex_process->parentheses_buffer, c);
+    }
+
     lex_process->pos.col += 1;
     if (c == '\n')
     {
@@ -57,6 +65,10 @@ struct token *token_create(struct token *_token)
 {
     memcpy(&tmp_token, _token, sizeof(struct token));
     tmp_token.pos = lex_file_position();
+    if (lex_is_in_expression())
+    {
+        tmp_token.between_brackets = buffer_ptr(lex_process->parentheses_buffer);
+    }
     return &tmp_token;
 }
 
