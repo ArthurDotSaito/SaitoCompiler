@@ -101,6 +101,14 @@ struct lex_process
     void *private;
 };
 
+enum
+{
+    NUMBER_TYPE_NORMAL,
+    NUMBER_TYPE_FLOAT,
+    NUMBER_TYPE_DOUBLE,
+    NUMBER_TYPE_LONG,
+};
+
 struct token
 {
     int type;
@@ -116,6 +124,11 @@ struct token
         unsigned long long llnum;
         void *any;
     };
+
+    struct token_number
+    {
+        int type;
+    } num;
 
     // It's true if there is whitespace between the token and the next token.
     // i.e * a for operator token * would mean whitespace would be set for token "a"
