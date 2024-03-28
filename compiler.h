@@ -201,6 +201,20 @@ struct node
     int flags;
 
     struct pos pos;
+    struct node_binded
+    {
+        struct node *owner;
+        struct node *function;
+    } binded;
+
+    union
+    {
+        char cval;
+        const char *sval;
+        unsigned int inum;
+        unsigned long lnum;
+        unsigned long long llnum;
+    };
 };
 
 int compile_file(const char *filename, const char *out_filename, int flags);
