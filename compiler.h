@@ -239,6 +239,8 @@ void lex_process_free(struct lex_process *process);
 void *lex_process_private(struct lex_process *process);
 struct vector lex_process_tokens(struct lex_process *process);
 
+int parse(struct compiler_process *process);
+
 void compiler_error(struct compiler_process *compiler, const char *msg, ...);
 void compiler_warning(struct compiler_process *compiler, const char *msg, ...);
 

@@ -52,6 +52,11 @@ int compile_file(const char *filename, const char *out_filename, int flags)
 
     // Perform parsing
 
+    if (parse(process != PARSE_ALL_OK))
+    {
+        return COMPILER_FAILED_WITH_ERRORS;
+    }
+
     // Perform code gen
 
     return COMPILER_FILE_COMPILED_OK;
