@@ -161,6 +161,47 @@ struct compiler_process
     struct vector *token_vec;
     FILE *ofile;
 };
+enum
+{
+    NODE_TYPE_EXPRESSION,
+    NODE_TYPE_EXPRESSION_PARENTHESES,
+    NODE_TYPE_NUMBER,
+    NODE_TYPE_IDENTIFIER,
+    NODE_TYPE_STRING,
+    NODE_TYPE_VARIABLE,
+    NODE_TYPE_VARIABLE_LIST,
+    NODE_TYPE_FUNCTION,
+    NODE_TYPE_BODY,
+    NODE_TYPE_STATEMENT_RETURN,
+    NODE_TYPE_IF,
+    NODE_TYPE_ELSE,
+    NODE_TYPE_WHILE,
+    NODE_TYPE_DO_WHILE,
+    NODE_TYPE_FOR,
+    NODE_TYPE_BREAK,
+    NODE_TYPE_CONTINUE,
+    NODE_TYPE_SWITCH,
+    NODE_TYPE_CASE,
+    NODE_TYPE_GOTO,
+    NODE_TYPE_DEFAULT,
+
+    NODE_TYPE_UNARY,
+    NODE_TYPE_TENARY,
+    NODE_TYPE_LABEL,
+    NODE_TYPE_STRUCT,
+    NODE_TYPE_UNION,
+    NODE_TYPE_BRACKET,
+    NODE_TYPE_CAST,
+    NODE_TYPE_BLANK
+};
+
+struct node
+{
+    int type;
+    int flags;
+
+    struct pos pos;
+};
 
 int compile_file(const char *filename, const char *out_filename, int flags);
 struct compiler_process *compile_process_create(const char *filename, const char *filename_out, int flags);
