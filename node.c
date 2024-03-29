@@ -5,7 +5,7 @@
 struct vector *node_vector = NULL;
 struct vector *node_vector_root = NULL;
 
-void node_set_vector(struct vector *vec, struct vecto *root_vec)
+void node_set_vector(struct vector *vec, struct vector *root_vec)
 {
     node_vector = vec;
     node_vector_root = root_vec;
@@ -40,4 +40,13 @@ struct node *node_pop()
     }
 
     return last_node;
+}
+
+struct node *node_create(struct node *_node)
+{
+    struct node *node = malloc(sizeof(struct node));
+    memcpy(node, _node, sizeof(struct node));
+#warning "TODO: Set the binded owner and function"
+    node_push(node);
+    return node;
 }
