@@ -75,13 +75,15 @@ int parse_next()
 int parse(struct compiler_process *process)
 {
     current_process = process;
+    parser_last_token = NULL;
+    node_set_vector(process->node_vec, process->node_tree_vec);
+    struct node *node = NULL;
     vector_set_peek_pointer(process->token_vec, 0);
 
-    struct node *node = NULL;
     while (parse_next() == 0)
     {
-        // node = node_peek();
-        vector_push(process->node_vec, &node);
+        node = node_peek();
+        vector_push(process->node_tree_vec, &node);
     }
     return PARSE_ALL_OK;
 }
