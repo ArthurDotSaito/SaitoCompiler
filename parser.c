@@ -38,8 +38,17 @@ void parse_single_token_to_node()
     switch (token->type)
     {
     case TOKEN_TYPE_NUMBER:
-        node = node_create(token->inum);
+        node = node_create(&(struct node){.type = NODE_TYPE_NUMBER, .llnum = token->llnum});
         break;
+    case TOKEN_TYPE_IDENTIFIER:
+        node = node_create(&(struct node){.type = NODE_TYPE_IDENTIFIER, .sval = token->sval});
+        break;
+    case TOKEN_TYPE_STRING:
+        node = node_create(&(struct node){.type = NODE_TYPE_STRING, .sval = token->sval});
+        break;
+
+    default:
+        compiler_error(current_process, "Unexpected token type %d", token->type);
     }
 }
 
