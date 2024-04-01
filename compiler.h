@@ -270,5 +270,7 @@ struct node *node_peek();
 struct node *node_peek_or_null();
 void node_push(struct node *node);
 void node_set_vector(struct vector *vec, struct vector *root_vec);
+bool node_is_expressionable(struct node *node);
+struct node *node_peek_expressionable_or_null();
 
 #endif
