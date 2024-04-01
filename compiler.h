@@ -275,6 +275,7 @@ bool token_is_nl_or_comment_or_newline_separator(struct token *token);
 bool token_is_symbol(struct token *token, char c);
 
 struct node *node_create(struct node *_node);
+void make_exp_node(struct node *left_node, struct node *right_node, const char *op);
 struct node *node_pop();
 struct node *node_peek();
 struct node *node_peek_or_null();
