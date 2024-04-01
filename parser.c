@@ -1,9 +1,20 @@
 #include "compiler.h"
 #include "helpers/vector.h"
 
-static struct compiler_process *current_process;
+struct history
+{
+    int flags;
+};
 
+static struct compiler_process *current_process;
 static struct token *parser_last_token;
+
+struct history *history_begin(int flags)
+{
+    struct history *history = calloc(1, sizeof(struct history));
+    history->flags = flags;
+    return history;
+}
 
 static void parser_ignore_nl_or_comment(struct token *token)
 {
