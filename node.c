@@ -42,6 +42,20 @@ struct node *node_pop()
     return last_node;
 }
 
+void make_exp_node(struct node *left_node, struct node *right_node, const char *op)
+{
+    assert(left_node);
+    assert(right_node);
+    node_create(&(struct node){
+        .type = NODE_TYPE_EXPRESSION,
+        .exp = {
+            .left = left_node,
+            .right = right_node,
+            .op = op,
+        },
+    });
+}
+
 struct node *node_create(struct node *_node)
 {
     struct node *node = malloc(sizeof(struct node));

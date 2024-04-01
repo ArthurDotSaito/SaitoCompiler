@@ -218,6 +218,16 @@ struct node
 
     union
     {
+        struct exp
+        {
+            struct node *left;
+            struct node *right;
+            const char *op;
+        } exp;
+    };
+
+    union
+    {
         char cval;
         const char *sval;
         unsigned int inum;
