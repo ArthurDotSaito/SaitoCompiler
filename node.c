@@ -50,3 +50,19 @@ struct node *node_create(struct node *_node)
     node_push(node);
     return node;
 }
+
+bool node_is_expressionable(struct node *node)
+{
+    return node->type == NODE_TYPE_EXPRESSION ||
+           node->type == NODE_TYPE_EXPRESSION_PARENTHESES ||
+           node->type == NODE_TYPE_UNARY ||
+           node->type == NODE_TYPE_IDENTIFIER ||
+           node->type == NODE_TYPE_NUMBER ||
+           node->type == NODE_TYPE_STRING;
+}
+
+struct node *node_peek_expressionable_or_null()
+{
+    struct node *last_node = node_peek_or_null();
+    return node_is_expressionable(last_node) ? last_node : NULL;
+};

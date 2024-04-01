@@ -71,6 +71,19 @@ void parse_single_token_to_node()
     }
 }
 
+void parse_exp_normal(struct history *history)
+{
+    struct token *op_token = token_peek_next();
+    char *op = op_token->sval;
+    struct node *node_left = node_peek_expressionable_or_null();
+};
+
+int parse_exp(struct history *history)
+{
+    parse_exp_normal(history);
+    return 0;
+};
+
 int parse_expressionable_single(struct history *history)
 {
     struct token *token = token_peek_next();
@@ -90,7 +103,6 @@ int parse_expressionable_single(struct history *history)
         break;
     case TOKEN_TYPE_OPERATOR:
         parse_exp(history);
-        res = 0;
     }
 
     return res;
