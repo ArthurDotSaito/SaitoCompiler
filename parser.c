@@ -104,7 +104,7 @@ static bool parser_left_op_has_priority(const char *op_left, const char *right_n
     struct expressionable_op_precedence_group *group_left = NULL;
     struct expressionable_op_precedence_group *group_right = NULL;
 
-    if (SEQ(op_left, right_node))
+    if (S_EQ(op_left, right_node))
     {
         return false;
     }
@@ -190,7 +190,7 @@ void parse_exp_normal(struct history *history)
     struct node *exp_node = node_peek();
 
     // Reorder the expression
-    parser_reorder_expression(exp_node);
+    parser_reorder_expression(&exp_node);
 
     node_push(exp_node);
 };
