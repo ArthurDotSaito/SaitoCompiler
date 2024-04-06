@@ -100,6 +100,23 @@ static int parser_get_precedence_for_operator(const char *op, struct expressiona
 
 static bool parser_left_op_has_priority(const char *op_left, const char *right_node)
 {
+    struct expressionable_op_precedence_group *group_left = NULL;
+    struct expressionable_op_precedence_group *group_right = NULL;
+
+    if (SEQ(op_left, right_node))
+    {
+        return false;
+    }
+
+    int precedence_left = parser_get_precedence_for_operator(op_left, &group_left);
+    int precedence_right = parser_get_precedence_for_operator(right_node, &group_right);
+
+    if (group_left->associativity == ASSOCIATIVITY_RIGHT_TO_LEFT)
+    {
+        return false;
+    }
+
+    return precedence_left >= precedence_right;
 }
 
 void parser_reorder_expression(struct node **node_out)
