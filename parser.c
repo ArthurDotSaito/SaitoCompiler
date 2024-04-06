@@ -9,6 +9,8 @@ struct history
 static struct compiler_process *current_process;
 static struct token *parser_last_token;
 
+extern struct expressionable_op_precedence_group op_precedence[TOTAL_OPERATOR_GROUPS];
+
 struct history *history_begin(int flags)
 {
     struct history *history = calloc(1, sizeof(struct history));
