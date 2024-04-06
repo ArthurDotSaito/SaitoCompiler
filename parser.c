@@ -81,6 +81,47 @@ void parse_expressionable_for_op(struct history *history, const char *op)
     parse_expressionable(history);
 };
 
+static int parser_get_precedence_for_operator(const char *op, struct expressionable_op_precedence_group **group_out)
+{
+    *group_out = NULL;
+    for (int i = 0; i < TOTAL_OPERATOR_GROUPS; i++)
+    {
+        for (int b = 0; op_precedence[i].operators[b]; b++)
+        {
+            const char *_op = op_precedence[i].operators[b];
+            if (S_EQ(op, _op))
+            {
+                *group_out = &op_precedence[i];
+                return i;
+            }
+        }
+    }
+}
+
+static bool parser_left_op_has_priority(const char *op_left, const char *right_node)
+{
+}
+
+void parser_reorder_expression(struct node **node_out)
+{
+    struct node *node = *node_out;
+    if (node->type != NODE_TYPE_EXPRESSION)
+    {
+        return;
+    }
+
+    // No expresions, nothing to do
+    if (node->exp.left->type != NODE_TYPE_EXPRESSION && node->exp.right->type != NODE_TYPE_EXPRESSION)
+    {
+        return;
+    }
+
+    if (node->exp.left->type != NODE_TYPE_EXPRESSION && node->exp.right->type == NODE_TYPE_EXPRESSION)
+    {
+        const char *op = node->exp.right->exp.op;
+    }
+}
+
 void parse_exp_normal(struct history *history)
 {
     struct token *op_token = token_peek_next();
@@ -107,6 +148,7 @@ void parse_exp_normal(struct history *history)
     struct node *exp_node = node_peek();
 
     // Reorder the expression
+    parser_reorder_expression(exp_node);
 
     node_push(exp_node);
 };
