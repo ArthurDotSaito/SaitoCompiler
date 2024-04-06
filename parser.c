@@ -1,5 +1,6 @@
 #include "compiler.h"
 #include "helpers/vector.h"
+#include "assert.h"
 
 struct history
 {
@@ -119,6 +120,24 @@ static bool parser_left_op_has_priority(const char *op_left, const char *right_n
     return precedence_left >= precedence_right;
 }
 
+void parser_node_shift_children_left(struct node *node)
+{
+    assert(node->type == NODE_TYPE_EXPRESSION);
+    assert(node->exp.right->type == NODE_TYPE_EXPRESSION);
+
+    const char *right_op = node->exp.right->exp.op;
+    struct node *new_exp_left_node = node->exp.left;
+    struct node *new_exp_right_node = node->exp.right->exp.left;
+    make_exp_node(new_exp_left_node, new_exp_right_node, node->exp.op);
+
+    struct node *new_left_operand = node_pop();
+    struct node *new_right_operand = node->exp.right->exp.right;
+
+    node->exp.left = new_left_operand;
+    node->exp.right = new_right_operand;
+    node->exp.op = right_op;
+}
+
 void parser_reorder_expression(struct node **node_out)
 {
     struct node *node = *node_out;
@@ -135,7 +154,13 @@ void parser_reorder_expression(struct node **node_out)
 
     if (node->exp.left->type != NODE_TYPE_EXPRESSION && node->exp.right->type == NODE_TYPE_EXPRESSION)
     {
-        const char *op = node->exp.right->exp.op;
+        const char *right_op = node->exp.right->exp.op;
+        if (parser_left_op_has_priority(node->exp.op, right_op))
+        {
+            parser_node_shift_children_left(node);
+            parser_reorder_expression(&node->exp.left);
+            parser_reorder_expression(&node->exp.right);
+        }
     }
 }
 
