@@ -201,7 +201,7 @@ enum
 
 enum
 {
-    NODE_FLAG_INSIDE_EXPRESSION = 0b00000001,
+    NODE_FLAG_INSIDE_EXPRESSION = 0b00000001
 };
 
 struct node

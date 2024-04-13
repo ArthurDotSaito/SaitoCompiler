@@ -13,7 +13,6 @@ void node_set_vector(struct vector *vec, struct vector *root_vec)
 
 void node_push(struct node *node)
 {
-
     vector_push(node_vector, &node);
 }
 
@@ -24,7 +23,7 @@ struct node *node_peek_or_null()
 
 struct node *node_peek()
 {
-    return *(struct node **)vector_back_ptr(node_vector);
+    return *(struct node **)(vector_back(node_vector));
 }
 
 struct node *node_pop()
@@ -48,12 +47,9 @@ void make_exp_node(struct node *left_node, struct node *right_node, const char *
     assert(right_node);
     node_create(&(struct node){
         .type = NODE_TYPE_EXPRESSION,
-        .exp = {
-            .left = left_node,
-            .right = right_node,
-            .op = op,
-        },
-    });
+        .exp.left = left_node,
+        .exp.right = right_node,
+        .exp.op = op});
 }
 
 struct node *node_create(struct node *_node)

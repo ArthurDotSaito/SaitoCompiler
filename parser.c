@@ -99,25 +99,25 @@ static int parser_get_precedence_for_operator(const char *op, struct expressiona
     }
 }
 
-static bool parser_left_op_has_priority(const char *op_left, const char *right_node)
+static bool parser_left_op_has_priority(const char *op_left, const char *op_right)
 {
     struct expressionable_op_precedence_group *group_left = NULL;
     struct expressionable_op_precedence_group *group_right = NULL;
 
-    if (S_EQ(op_left, right_node))
+    if (S_EQ(op_left, op_right))
     {
         return false;
     }
 
     int precedence_left = parser_get_precedence_for_operator(op_left, &group_left);
-    int precedence_right = parser_get_precedence_for_operator(right_node, &group_right);
+    int precedence_right = parser_get_precedence_for_operator(op_right, &group_right);
 
     if (group_left->associativity == ASSOCIATIVITY_RIGHT_TO_LEFT)
     {
         return false;
     }
 
-    return precedence_left >= precedence_right;
+    return precedence_left <= precedence_right;
 }
 
 void parser_node_shift_children_left(struct node *node)
@@ -147,12 +147,14 @@ void parser_reorder_expression(struct node **node_out)
     }
 
     // No expresions, nothing to do
-    if (node->exp.left->type != NODE_TYPE_EXPRESSION && node->exp.right->type != NODE_TYPE_EXPRESSION)
+    if (node->exp.left->type != NODE_TYPE_EXPRESSION &&
+        node->exp.right && node->exp.right->type != NODE_TYPE_EXPRESSION)
     {
         return;
     }
 
-    if (node->exp.left->type != NODE_TYPE_EXPRESSION && node->exp.right->type == NODE_TYPE_EXPRESSION)
+    if (node->exp.left->type != NODE_TYPE_EXPRESSION &&
+        node->exp.right && node->exp.right->type == NODE_TYPE_EXPRESSION)
     {
         const char *right_op = node->exp.right->exp.op;
         if (parser_left_op_has_priority(node->exp.op, right_op))
@@ -181,8 +183,6 @@ void parse_exp_normal(struct history *history)
     node_pop();
     node_left->flags |= NODE_FLAG_INSIDE_EXPRESSION;
     parse_expressionable_for_op(history_down(history, history->flags), op);
-
-    // pop off the right node
     struct node *node_right = node_pop();
     node_right->flags |= NODE_FLAG_INSIDE_EXPRESSION;
 
