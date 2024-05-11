@@ -19,6 +19,10 @@ bool token_is_symbol(struct token *token, char c)
     return token->type == TOKEN_TYPE_SYMBOL && token->cval == c;
 }
 
+bool token_is_operator(struct token *token, char *val){
+    return token->type == TOKEN_TYPE_OPERATOR && S_EQ(token->sval, val);
+}
+
 bool token_is_primitive_keyword(struct token* token){
     if(token->type != TOKEN_TYPE_KEYWORD){
         return false;

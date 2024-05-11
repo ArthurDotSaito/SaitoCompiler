@@ -56,6 +56,11 @@ static struct token *token_peek_next()
     return vector_peek_no_increment(current_process->token_vec);
 }
 
+static bool token_next_is_operator(const char* op){
+    struct token* token = token_peek_next();
+    return token_is_operator(token, op);
+}
+
 void parse_single_token_to_node()
 {
     struct token *token = token_next();
@@ -282,6 +287,34 @@ struct token* parser_build_random_type_name(){
     return token;
 }
 
+int parser_get_pointer_depth(){
+    int depth = 0;
+    while (token_next_is_operator("*")){
+        depth++;
+        token_next();
+    }
+    return depth;
+}
+
+void parser_datatype_init_type_and_size(
+        struct token* datatype_token,
+        struct token* datatype_secondary_token,
+        struct datatype* datatype_out,
+        int pointer_depth,
+        int expected_type
+        ){
+
+}
+
+void parser_datatype_init(
+        struct token* datatype_token,
+        struct token* datatype_secondary_token,
+        struct datatype* datatype_out,
+        int pointer_depth,
+        int expected_type){
+
+}
+
 void parse_datatype_type(struct datatype* dtype){
     struct token* datatype_token = NULL;
     struct token* datatype_secondary_token = NULL;
@@ -297,6 +330,8 @@ void parse_datatype_type(struct datatype* dtype){
             dtype->flags |= DATATYPE_FLAG_STRUCT_UNION_NO_NAME;
         }
     }
+
+    int pointer_depth = parser_get_pointer_depth();
 }
 
 void parse_datatype(struct datatype* dtype){
@@ -319,7 +354,6 @@ void parse_keyword(struct history* history){
         parse_variable_function_or_struct_union(history);
         return;
     }
-
 
 }
 
