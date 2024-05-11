@@ -300,6 +300,18 @@ bool lex_is_in_expression()
     return lex_process->current_expression_count > 0;
 }
 
+bool keyword_is_datatype(const char* string){
+    return S_EQ(string, "void") ||
+            S_EQ(string, "char") ||
+            S_EQ(string, "int") ||
+            S_EQ(string, "short") ||
+            S_EQ(string, "float") ||
+            S_EQ(string, "double") ||
+            S_EQ(string, "long") ||
+            S_EQ(string, "struct") ||
+            S_EQ(string, "union");
+}
+
 bool is_keyword(const char *str)
 {
     return S_EQ(str, "unsigned") ||
