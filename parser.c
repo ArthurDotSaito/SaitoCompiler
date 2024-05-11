@@ -245,6 +245,35 @@ void parse_datatype_modifiers(struct datatype *dtype){
     }
 }
 
+void parser_get_datatype_tokens(struct token** datatype_token, struct token** datatype_secondary_token){
+    *datatype_token = token_next();
+    struct token* next_token = token_peek_next();
+    if(token_is_primitive_keyword(next_token)){
+        *datatype_secondary_token = next_token;
+        token_next();
+    }
+}
+
+int parser_datatype_expected_for_type_string(const char* str){
+    int type = DATA_TYPE_EXPECT_PRIMITIVE;
+    if(S_EQ(str, "union")){
+        type = DATA_TYPE_EXPECT_UNION;
+    }else if(S_EQ(str, "struct")){
+        type = DATA_TYPE_EXPECT_STRUCT;
+    }
+
+    return type;
+}
+
+void parse_datatype_type(struct datatype* dtype){
+    struct token* datatype_token = NULL;
+    struct token* datatype_secondary_token = NULL;
+
+    parser_get_datatype_tokens(&datatype_token, &datatype_secondary_token);
+
+    int expected_type = parser_datatype_expected_for_type_string(datatype_token->sval);
+}
+
 void parse_datatype(struct datatype* dtype){
     memset(dtype, 0, sizeof(struct datatype));
     dtype->flags |= DATATYPE_FLAG_IS_SIGNED;
