@@ -325,6 +325,7 @@ bool token_is_symbol(struct token *token, char c);
 
 bool keyword_is_datatype(const char* string);
 bool token_is_primitive_keyword(struct token* token);
+bool datatype_is_struct_or_union_for_name(const char* name);
 
 struct node *node_create(struct node *_node);
 void make_exp_node(struct node *left_node, struct node *right_node, const char *op);
