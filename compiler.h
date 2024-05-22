@@ -291,6 +291,14 @@ enum{
     DATA_TYPE_EXPECT_STRUCT
 };
 
+enum{
+    DATA_SIZE_ZERO = 0,
+    DATA_SIZE_BYTE = 1,
+    DATA_SIZE_WORD = 2,
+    DATA_SIZE_DWORD = 4,
+    DATA_SIZE_DDWORD = 8,
+};
+
 int compile_file(const char *filename, const char *out_filename, int flags);
 struct compiler_process *compile_process_create(const char *filename, const char *filename_out, int flags);
 

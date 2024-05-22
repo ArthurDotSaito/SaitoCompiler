@@ -296,6 +296,45 @@ int parser_get_pointer_depth(){
     return depth;
 }
 
+bool parser_datatype_is_secondary_allowed(int expected_type){
+    return expected_type == DATA_TYPE_EXPECT_PRIMITIVE;
+}
+
+bool parser_datatype_is_secondary_allowed_for_type(const char* type){
+    return S_EQ(type, "long") || S_EQ(type, "short") || S_EQ(type, "double") || S_EQ(type, "float");
+}
+
+void parser_datatype_init_type_and_size_for_primitive(struct token* datatype_token, struct token* datatype_secondary_token, struct datatype* datatype_out){
+    if(parser_datatype_is_secondary_allowed_for_type(datatype_token->sval) && datatype_out){
+        compiler_error(current_process, "A secondary type is not allowed here %s\n", datatype_token->sval);
+    }
+
+    if(S_EQ(datatype_token->sval, "void")){
+        datatype_out->type = DATA_TYPE_VOID;
+        datatype_out->size = DATA_SIZE_ZERO;
+    }else if(S_EQ(datatype_token->sval, "char")){
+        datatype_out->type = DATA_TYPE_CHAR;
+        datatype_out->size = DATA_SIZE_BYTE;
+    }else if(S_EQ(datatype_token->sval, "short")){
+        datatype_out->type = DATA_TYPE_SHORT;
+        datatype_out->size = DATA_SIZE_WORD;
+    }else if(S_EQ(datatype_token->sval, "int")){
+        datatype_out->type = DATA_TYPE_INTEGER;
+        datatype_out->type = DATA_SIZE_DWORD;
+    }else if(S_EQ(datatype_token->sval, "long")){
+        datatype_out->type = DATA_TYPE_LONG;
+        datatype_out->size = DATA_SIZE_DWORD;
+    }else if(S_EQ(datatype_token->sval, "float")){
+        datatype_out->type = DATA_TYPE_FLOAT;
+        datatype_out->size = DATA_SIZE_DWORD;
+    }else if(S_EQ(datatype_token->sval, "double")){
+        datatype_out->type = DATA_TYPE_DOUBLE;
+        datatype_out->size = DATA_SIZE_DWORD;
+    } else{
+        compiler_error(current_process, "BUG: Invalid primitive datatype!\n");
+    }
+}
+
 void parser_datatype_init_type_and_size(
         struct token* datatype_token,
         struct token* datatype_secondary_token,
@@ -303,7 +342,15 @@ void parser_datatype_init_type_and_size(
         int pointer_depth,
         int expected_type
         ){
+    if(!parser_datatype_is_secondary_allowed(expected_type) && datatype_secondary_token){
+        compiler_error(current_process,"A secondary datatype is not allowed");
+    }
 
+    switch(expected_type){
+        case DATA_TYPE_EXPECT_PRIMITIVE:
+            parser_datatype_init_type_and_size_for_primitive(datatype_token, datatype_secondary_token, datatype_out);
+            break;
+    }
 }
 
 void parser_datatype_init(
