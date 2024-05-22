@@ -303,6 +303,18 @@ bool parser_datatype_is_secondary_allowed(int expected_type){
 bool parser_datatype_is_secondary_allowed_for_type(const char* type){
     return S_EQ(type, "long") || S_EQ(type, "short") || S_EQ(type, "double") || S_EQ(type, "float");
 }
+void parser_datatype_init_type_and_size_for_primitive(struct token* datatype_token, struct token* datatype_secondary_token, struct datatype* datatype_out);
+void parser_datatype_adjust_size_for_secondary(struct datatype* datatype, struct token* datatype_secondary_token, struct datatype* datatype_out){
+    if(!datatype_secondary_token){
+        return;
+    }
+
+    struct datatype* secondary_data_type = calloc(1, sizeof(struct datatype));
+    parser_datatype_init_type_and_size_for_primitive(datatype_secondary_token, NULL, secondary_data_type);
+    datatype->size +=secondary_data_type->size;
+    datatype->secondary = secondary_data_type;
+    datatype->flags |= DATATYPE_FLAG_IS_SECONDARY;
+}
 
 void parser_datatype_init_type_and_size_for_primitive(struct token* datatype_token, struct token* datatype_secondary_token, struct datatype* datatype_out){
     if(parser_datatype_is_secondary_allowed_for_type(datatype_token->sval) && datatype_out){
@@ -333,6 +345,8 @@ void parser_datatype_init_type_and_size_for_primitive(struct token* datatype_tok
     } else{
         compiler_error(current_process, "BUG: Invalid primitive datatype!\n");
     }
+
+    parser_datatype_adjust_size_for_secondary(datatype_out, datatype_secondary_token);
 }
 
 void parser_datatype_init_type_and_size(
@@ -350,6 +364,13 @@ void parser_datatype_init_type_and_size(
         case DATA_TYPE_EXPECT_PRIMITIVE:
             parser_datatype_init_type_and_size_for_primitive(datatype_token, datatype_secondary_token, datatype_out);
             break;
+
+        case DATA_TYPE_EXPECT_STRUCT:
+        case DATA_TYPE_EXPECT_UNION:
+            compiler_error(current_process, "Structure and union types currently unsupported\n");
+            break;
+        default:
+            compiler_error(current_process, "BUG: Unsuported datatype expectation\n");
     }
 }
 
