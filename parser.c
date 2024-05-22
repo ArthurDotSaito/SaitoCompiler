@@ -380,7 +380,13 @@ void parser_datatype_init(
         struct datatype* datatype_out,
         int pointer_depth,
         int expected_type){
+    parser_datatype_init_type_and_size(datatype_token, datatype_secondary_token, datatype_out, pointer_depth, expected_type);
+    datatype_out->type_str = datatype_token->sval;
 
+    if(S_EQ(datatype_token->sval, "long") && datatype_secondary_token && S_EQ(datatype_secondary_token->sval, "long")){
+        compiler_warning(current_process, "Compiler does not support 64 bit longs. therefore, long long is defaulting to 32 bits\n");
+        datatype_out->size = DATA_SIZE_DWORD;
+    }
 }
 
 void parse_datatype_type(struct datatype* dtype){
@@ -400,6 +406,7 @@ void parse_datatype_type(struct datatype* dtype){
     }
 
     int pointer_depth = parser_get_pointer_depth();
+    parser_datatype_init(datatype_token, datatype_secondary_token, dtype, pointer_depth, expected_type);
 }
 
 void parse_datatype(struct datatype* dtype){
